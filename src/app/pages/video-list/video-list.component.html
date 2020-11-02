@@ -1,1 +1,62 @@
-<p>video-list works!</p>
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Welcome to VidWare!</h1>
+      <p>It means <strong>Vid</strong>eo soft<strong>ware</strong> - Get it?</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <form class="form-inline my-2 my-lg-0">
+          <input (keyup)="searchList($event)" aria-label="Search" class="form-control mr-sm-2 w-50" placeholder="Search by Name or Author" type="text">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+      <div class="col-4">
+        <button class="btn btn-success float-lg-right">Add Video</button>
+      </div>
+    </div>
+
+    <div class="row pt-5">
+      <app-guest-notice></app-guest-notice>
+      <table class="table">
+        <thead>
+        <tr>
+          <th (click)="sortColumn('name')" scope="col" style="cursor: pointer">Video Name</th>
+          <th (click)="sortColumn('authorName')" scope="col" style="cursor: pointer">Author</th>
+          <th scope="col">Category Name</th>
+          <th scope="col">Highest Quality Format</th>
+          <th scope="col">Release Date</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="filteredList?.length; else noVideo">
+        <tr *ngFor="let video of filteredList">
+          <td>{{video.name}}</td>
+          <td>{{video.authorName}}</td>
+          <td>{{getCategoryName(video.catIds)}}</td>
+          <td>{{getHighestQuality(video.formats).text}}</td>
+          <td>{{video.releaseDate | date:'mediumDate'}}</td>
+          <td>
+            <button class="btn btn-sm btn-info" routerLink="/videos/{{video.id}}/edit">Edit</button>&nbsp;
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </td>
+        </tr>
+        </tbody>
+        <ng-template #noVideo>
+          <tbody>
+          <tr>
+            <td class="alert alert-info w-100 pt-3" colspan="6">No videos found</td>
+          </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+    <hr>
+  </div> <!-- /container -->
+</main>
+

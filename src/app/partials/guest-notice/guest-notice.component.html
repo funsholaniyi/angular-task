@@ -1,0 +1,7 @@
+<div #alertNotice *ngIf="!hide" [hidden]="!message" class="alert alert-{{type}} alert-dismissible fade show p-2"
+     role="alert">
+  <span [innerHTML]="message" class="alert-text"></span>
+  <button (click)="hideAlert()" aria-label="Close" class="close" data-dismiss="alert" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
