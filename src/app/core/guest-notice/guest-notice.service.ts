@@ -12,17 +12,12 @@ export class GuestNoticeService {
     this.onNoticeChanged$ = new BehaviorSubject(null);
   }
 
-  /**
-   * Set the notice value
-   * @param message
-   * @param type
-   */
-  setNotice(message: string, type?: string) {
+  setNotice(message: string, type?: string): void {
     if (type === 'info') {
       type = 'primary';
     }
     const notice: GuestNotice = {
-      message: message,
+      message,
       type: type ? type : 'primary'
     };
     this.onNoticeChanged$.next(notice);

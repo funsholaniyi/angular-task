@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -11,19 +12,16 @@ import { PartialsModule } from './partials/partials.module';
 const routes: Routes = [
   {
     path: 'videos',
-    component: VideoListComponent,
-    children: [
-      {
-        path: 'add',
-        component: VideoEditComponent
-      },
-      {
-        path: ':id/edit',
-        component: VideoEditComponent
-      }
-    ]
+    component: VideoListComponent
   },
-
+  {
+    path: 'videos/add',
+    component: VideoEditComponent
+  },
+  {
+    path: 'videos/:id/edit',
+    component: VideoEditComponent
+  },
   {path: '', redirectTo: 'videos', pathMatch: 'full'},
   {path: '**', redirectTo: 'error', pathMatch: 'full'}
 ];
@@ -38,7 +36,9 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    PartialsModule
+    PartialsModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

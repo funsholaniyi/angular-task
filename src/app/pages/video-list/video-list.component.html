@@ -3,7 +3,7 @@
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-3">Welcome to VidWare!</h1>
+      <h1 class="display-3">Welcome to Vid<strong>Ware</strong>!</h1>
       <p>It means <strong>Vid</strong>eo soft<strong>ware</strong> - Get it?</p>
     </div>
   </div>
@@ -17,12 +17,12 @@
         </form>
       </div>
       <div class="col-4">
-        <button class="btn btn-success float-lg-right">Add Video</button>
+        <button class="btn btn-success float-lg-right" routerLink="/videos/add">Add Video</button>
       </div>
     </div>
 
     <div class="row pt-5">
-      <app-guest-notice></app-guest-notice>
+      <app-guest-notice class="w-100"></app-guest-notice>
       <table class="table">
         <thead>
         <tr>
@@ -43,7 +43,7 @@
           <td>{{video.releaseDate | date:'mediumDate'}}</td>
           <td>
             <button class="btn btn-sm btn-info" routerLink="/videos/{{video.id}}/edit">Edit</button>&nbsp;
-            <button class="btn btn-sm btn-danger">Delete</button>
+            <button (click)="deleteVideo(video)" class="btn btn-sm btn-danger">Delete</button>
           </td>
         </tr>
         </tbody>

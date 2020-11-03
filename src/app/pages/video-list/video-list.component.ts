@@ -26,6 +26,13 @@ export class VideoListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getVideos();
+    this.getCategories();
+
+
+  }
+
+  getCategories(): void {
     this.categoryService.getCategories().pipe(tap(categories => {
       if (categories) {
         // save the category, to be used later
@@ -36,20 +43,15 @@ export class VideoListComponent implements OnInit {
       this.guestNoticeService.setNotice(message, 'danger');
       return of(error);
     })).subscribe();
+  }
 
-
+  getVideos(): void {
     this.authorService.getAuthors().pipe(
       tap((authors) => {
-        if (authors) {
-          // go through the list of all authors to extract their videos, identify them and eventually merge them to a list
-          this.videoList = authors.map(author => {
-            // add authorName to each video item, to be able to identify the author name
-            return author.videos.map(v => ({...v, authorName: author.name}));
-          }).reduce(
-            // this step is to combine the different chunks of arrays into one big array of videos
-            (videoArray, videos) => videoArray.concat(videos));
+        if (authors.length) {
+          this.videoList = this.authorService.convertAuthorModelToVideoModel(authors);
+          this.filteredList = Array.from(this.videoList);
         }
-        this.filteredList = Array.from(this.videoList);
       }),
       catchError(error => {
         const message = 'An error occurred trying to get videos';
@@ -58,11 +60,10 @@ export class VideoListComponent implements OnInit {
       })).subscribe();
   }
 
-  /**
-   * Get category name by id and return joined string
-   * @param catIds
-   */
-  getCategoryName(catIds: number[]) {
+  getCategoryName(catIds: number[]): string {
+    if (!catIds.length || !this.categoryList?.length) {
+      return '';
+    }
     // with each id, find its object in the category list, extract the name, then join into string
     return catIds.map(id =>
       this.categoryList.find(category =>
@@ -70,15 +71,12 @@ export class VideoListComponent implements OnInit {
       .join(', ');
   }
 
-  /**
-   * function to return the highest video quality
-   * @param formats
-   */
-  getHighestQuality(formats: FormatModel) {
+
+  getHighestQuality(formats: FormatModel): any {
     let highest = 0;
     let highestSize = 0;
     let highestKey = '';
-    Object.keys(formats).forEach((key, i) => {
+    Object.keys(formats).forEach((key) => {
       const obj = formats[key];
       const resInt = parseInt(obj.res.slice(0, -1), 10);
       if (resInt > highest) {
@@ -95,11 +93,8 @@ export class VideoListComponent implements OnInit {
     return {highest, highestSize, highestKey, text: highestKey + ' ' + highest.toString() + 'p'};
   }
 
-  /**
-   * function to search by name or author name
-   * @param event
-   */
-  searchList(event: any) {
+
+  searchList(event: any): void {
     const search = event.target.value.toLowerCase();
     const copiedList = Array.from(this.videoList);
 
@@ -113,15 +108,22 @@ export class VideoListComponent implements OnInit {
 
   }
 
-  /**
-   * function to sort by specified column name
-   * @param columnName
-   */
-  sortColumn(columnName: string) {
+
+  sortColumn(columnName: string): void {
     this.filteredList.sort((a, b) => {
       return this.sortAsc ? a[columnName].localeCompare(b[columnName]) : b[columnName].localeCompare(a[columnName]);
     });
     this.sortAsc = !this.sortAsc;
 
+  }
+
+  deleteVideo(video: VideoModel): void {
+    if (confirm('Are you sure to delete ' + video.name + '. All entries from the author will be lost.')) {
+      this.authorService.deleteAuthor(video.authorId).subscribe(() => {
+        this.getVideos();
+        const message = 'Video successfully deleted';
+        this.guestNoticeService.setNotice(message, 'info');
+      });
+    }
   }
 }

@@ -1,1 +1,27 @@
-<p>video-edit works!</p>
+<div class="container my-5">
+  <div class="row">
+    <form [formGroup]="videoForm" class="col-8">
+      <h2>Add Video</h2>
+      <app-guest-notice></app-guest-notice>
+      <hr>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Video Name</label>
+        <input class="form-control" formControlName="videoName" id="exampleFormControlInput1" placeholder="Video Name" type="text">
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlInput2">Video Author</label>
+        <input class="form-control" formControlName="videoAuthor" id="exampleFormControlInput2" placeholder="Video Author" type="text">
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlSelect2">Video Category</label>
+        <select *ngIf="categoryList" class="form-control" formControlName="categories" id="exampleFormControlSelect2" multiple>
+          <option *ngFor="let category of categoryList" [value]="category.id">{{category.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button (click)="onSubmit()" [disabled]="videoForm.invalid" class="btn btn-primary" type="button">Submit</button>&nbsp;
+        <button class="btn btn-light" routerLink="/videos" type="button">Go Back</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,10 +1,11 @@
 export class VideoModel {
-  id: number;
+  id?: number;
   catIds: number[];
   authorName?: string;
+  authorId?: number;
   name: string;
   formats: FormatModel;
-  releaseDate: string;
+  releaseDate?: string;
 }
 
 export class FormatModel {

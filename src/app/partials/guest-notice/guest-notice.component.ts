@@ -20,7 +20,7 @@ export class GuestNoticeComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptions.push(
       this.guestNoticeService.onNoticeChanged$.subscribe(
         (notice: GuestNotice) => {
@@ -42,7 +42,7 @@ export class GuestNoticeComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sb => sb.unsubscribe());
   }
 
-  hideAlert() {
+  hideAlert(): void {
     this.hide = true;
   }
 }

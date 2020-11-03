@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -13,7 +13,9 @@ export class CategoryService {
 
 
   getCategories(): Observable<CategoryModel[]> {
-    return this.http.get<CategoryModel[]>(API_ENDPOINT + 'categories');
+    let httpHeaders = new HttpHeaders();
+    httpHeaders = httpHeaders.set('Content-Type', 'application/json');
+    return this.http.get<CategoryModel[]>(API_ENDPOINT + 'categories', {headers: httpHeaders});
   }
 
 }
